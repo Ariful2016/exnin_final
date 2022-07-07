@@ -42,6 +42,11 @@ public class SignInActivity extends AppCompatActivity {
 
     TextView txtSignup, txtErrMsg;
 
+    public static String role;
+    public static String userName;
+    public static String user;
+    public static String token;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,12 +61,12 @@ public class SignInActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Please wait...");
-        progressDialog.setMessage("Sign in with email...");
+        progressDialog.setMessage("Sign in with email & Password...");
 
         txtSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), SignUpActivity.class));
+                startActivity(new Intent(getApplicationContext(), StudentRegisterActivity.class));
             }
         });
 
@@ -107,16 +112,19 @@ public class SignInActivity extends AppCompatActivity {
                                 SharedPrefManager.saveUserID(loginResponse.getUser().getId(), SignInActivity.this);
 
                                 SharedPrefManager.getInstance(SignInActivity.this).saveUser(loginResponse);
-                                //startActivity(new Intent(SignInActivity.this, DashboardActivity.class));
-                                finish();
-                                /*for (int i=0; i<loginResponse.getUser().getRoles().size(); i++){
-                                    String role = loginResponse.getUser().getRoles().get(i).getName();
-                                    if (Objects.equals(role, "student")){
-                                        startActivity(new Intent(SignInActivity.this, DashboardActivity.class));
-                                    }else {
 
+                                user =loginResponse.getUser().toString();
+                                userName = loginResponse.getUser().getName();
+                                token = loginResponse.getToken();
+
+                                for (int i=0; i<loginResponse.getUser().getRoles().size(); i++){
+                                     role = loginResponse.getUser().getRoles().get(i).getName();
+                                    if (role.equals("student")){
+                                        startActivity(new Intent(SignInActivity.this, YourProfileActivity.class));
+                                    }else if (role.equals("teacher")){
+                                        startActivity(new Intent(SignInActivity.this, TeacherProfileActivity.class));
                                     }
-                                }*/
+                                }
                             } else {
                                 txtErrMsg.setText("Email or Password doesn't match, please try again!");
 

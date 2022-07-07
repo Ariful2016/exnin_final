@@ -291,7 +291,7 @@ public class TeacherRegisterActivity extends AppCompatActivity {
         login_txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), TeacherLoginActivity.class));
+                startActivity(new Intent(getApplicationContext(), SignInActivity.class));
             }
         });
 

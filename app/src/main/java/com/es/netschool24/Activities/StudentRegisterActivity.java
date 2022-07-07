@@ -50,24 +50,13 @@ public class StudentRegisterActivity extends AppCompatActivity {
             guardian_phoneEdit,passwordEdit;
 
     AppCompatButton register_btn;
-    TextView login_txt;
+    TextView login_txt,teacher_register_txt;
 
-    //AutoCompleteTextView name_of_course,day;
-
-    /*String[] course_names = {"Kid's Learning", "Kid's English", "Spoken English", "Arabic Shikkha", "Quran Shikkha", "Bangla Language ", "Foreign Language",
-                             "General knowledge", "Basic Computer", "Official Computer", "Video Editing", "Digital Marketing", "Graphics Design", "Web Design", "App Development", "Freelancing", "Others"};
-
-    String [] days = {"SAT - TUE - FRI", "SUN - TUE - THU", "MON - WED - FRI", "SAT - TUE - FRI", "TUE - THU - SAT", "WED - FRI - SUN", "THU - SAT - MON", "FRI - SUN - TUE"};
-
-    String [] times = { "06:00 pm" , "06:00 pm" , "06:00 pm" , "06:00 pm" , "06:00 pm" };*/
 
     DatePickerDialog datePickerDialog;
     DatePicker datePicker;
 
 
-    //FirebaseAuth firebaseAuth;
-    //FirebaseUser firebaseUser;
-    //DatabaseReference databaseReference;
 
     ProgressDialog progressDialog;
 
@@ -97,6 +86,7 @@ public class StudentRegisterActivity extends AppCompatActivity {
         passwordEdit = findViewById(R.id.password);
         register_btn = findViewById(R.id.submit);
         login_txt = findViewById(R.id.login_txt);
+        teacher_register_txt = findViewById(R.id.teacher_register_txt);
 
 
 
@@ -106,9 +96,6 @@ public class StudentRegisterActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        // initialise firebaseAuth & databaseReference
-        //firebaseAuth = FirebaseAuth.getInstance();
-        //databaseReference = FirebaseDatabase.getInstance().getReference("User").child("Student");
 
         // initialise progressDialog
         progressDialog = new ProgressDialog(StudentRegisterActivity.this);
@@ -146,7 +133,7 @@ public class StudentRegisterActivity extends AppCompatActivity {
         login_txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               startActivity(new Intent(getApplicationContext(),StudentLoginActivity.class));
+               startActivity(new Intent(getApplicationContext(),SignInActivity.class));
             }
         });
 
@@ -221,6 +208,13 @@ public class StudentRegisterActivity extends AppCompatActivity {
 
 
 
+            }
+        });
+
+        teacher_register_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(StudentRegisterActivity.this, TeacherRegisterActivity.class));
             }
         });
 

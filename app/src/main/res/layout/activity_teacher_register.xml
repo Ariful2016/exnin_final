@@ -36,7 +36,6 @@
                 android:id="@+id/card"
                 android:layout_margin="10dp"
                 app:cardCornerRadius="10dp"
-                android:layout_below="@id/txt2"
                 >
 
                 <LinearLayout

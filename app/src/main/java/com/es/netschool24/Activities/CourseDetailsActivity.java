@@ -19,7 +19,11 @@ import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.es.netschool24.AppConstants.AppConstants;
+import com.es.netschool24.Models.AllCourse;
+import com.es.netschool24.Models.AllCourseParent;
 import com.es.netschool24.Models.CourseDay;
+import com.es.netschool24.Models.Installment;
 import com.es.netschool24.Models.LoginResponse;
 import com.es.netschool24.MyApi;
 import com.es.netschool24.MyRetrofit;
@@ -46,7 +50,8 @@ public class CourseDetailsActivity extends AppCompatActivity {
     CircleImageView course_img, int_img;
 
     TextView course_title_txt, overviewDescription_txt, kid_subject_txt, kid_subject_bem_txt,
-            duration_month_txt, total_class_txt, total_class_time_txt, taka_txt, usd_txt, first_installment_txt;
+            duration_month_txt, total_class_txt, total_class_time_txt, taka_txt, usd_txt;
+    TextView first_installment_txt, second_installment_txt, third_installment_txt, first_details_txt, second_details_txt,third_details_txt;
 
     Intent intent;
 
@@ -63,12 +68,14 @@ public class CourseDetailsActivity extends AppCompatActivity {
 
     String[] selectDay;
 
-    @SuppressLint ("RestrictedApi")
+    MyApi myApi;
+
+    @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_details);
-
+        myApi = MyRetrofit.getRetrofit().create(MyApi.class);
 
         intent = getIntent();
 
@@ -82,47 +89,34 @@ public class CourseDetailsActivity extends AppCompatActivity {
 
         courseDayList = new ArrayList<>();
 
-
-        if (intent.hasExtra("img")) {
-            img = intent.getStringExtra("img");
-            courseId = intent.getStringExtra("id");
-            title = intent.getStringExtra("title");
-            overview = intent.getStringExtra("overview");
-            slug = intent.getStringExtra("slug");
-            duration = intent.getStringExtra("duration");
-            totalClass = intent.getStringExtra("totalClass");
-            classInfo = intent.getStringExtra("classInfo");
-            fee = intent.getStringExtra("fee");
-            usdeuro = intent.getStringExtra("usdeuro");
-            //installment = intent.getStringExtra("installment");
-        }
-
         course_img = findViewById(R.id.course_img);
         course_title_txt = findViewById(R.id.course_title_txt);
         overviewDescription_txt = findViewById(R.id.overviewDescription_txt);
         kid_subject_txt = findViewById(R.id.kid_subject_txt);
-        kid_subject_bem_txt = findViewById(R.id.kid_subject_bem_txt);
         duration_month_txt = findViewById(R.id.duration_month_txt);
         total_class_txt = findViewById(R.id.total_class_txt);
         total_class_time_txt = findViewById(R.id.total_class_time_txt);
         taka_txt = findViewById(R.id.taka_txt);
         usd_txt = findViewById(R.id.usd_txt);
         first_installment_txt = findViewById(R.id.first_installment_txt);
+        second_installment_txt = findViewById(R.id.second_installment_txt);
+        third_installment_txt = findViewById(R.id.third_installment_txt);
+
+        third_details_txt = findViewById(R.id.third_details_txt);
+        first_details_txt = findViewById(R.id.first_details_txt);
+        second_details_txt = findViewById(R.id.second_details_txt);
 
 
-        //course_img.setImageURI(Uri.parse(img));
-        Picasso.get().load(img).placeholder(R.drawable.kidlearning).into(course_img);
+        if (intent.hasExtra("id")) {
 
-        course_title_txt.setText(title);
-        overviewDescription_txt.setText(overview);
-        kid_subject_txt.setText(slug);
-        kid_subject_bem_txt.setText(slug);
-        duration_month_txt.setText("Duration: " + duration + " months");
-        total_class_txt.setText("Total Class: " + totalClass);
-        total_class_time_txt.setText("(" + classInfo + ")");
-        taka_txt.setText(fee + " BDT");
-        usd_txt.setText(usdeuro);
-        //first_installment_txt.setText("1st installment = "+installment);
+            courseId = intent.getStringExtra("id");
+
+            getCourse(courseId);
+
+        }
+
+
+
 
 
         MyApi myApi = MyRetrofit.getRetrofit().create(MyApi.class);
@@ -206,6 +200,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
 
                             Log.i("Enroll", "onResponse: " + response);
                             dialog.dismiss();
+                            startActivity(new Intent(CourseDetailsActivity.this, CartActivity.class));
                         }
 
                         @Override
@@ -246,6 +241,81 @@ public class CourseDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialog.show();
+            }
+        });
+
+
+    }
+
+    private void getCourse(String courseId) {
+
+        myApi.getAllCourse().enqueue(new Callback<AllCourseParent>() {
+            @Override
+            public void onResponse(Call<AllCourseParent> call, Response<AllCourseParent> response) {
+                AllCourseParent allCourseParent = response.body();
+                List<AllCourse> allCourse = allCourseParent.getCourse();
+
+                Log.i("TAG", "onResponse: " + allCourse);
+
+
+
+                Integer cId = Integer.parseInt(courseId);
+                for (AllCourse courses : allCourse) {
+
+                    if (cId.equals(courses.getId())) {
+
+                        course_title_txt.setText(courses.getName());
+                        Picasso.get().load(AppConstants.course_image_path + courses.getBannerImage()).placeholder(R.drawable.kid_learning_all_courses).into(course_img);
+                        overviewDescription_txt.setText(courses.getOverview());
+                        kid_subject_txt.setText(courses.getSlug());
+                        duration_month_txt.setText("Duration : "+courses.getDuration()+" month");
+                        total_class_txt.setText("Total Class : "+courses.getTotalClass());
+                        total_class_time_txt.setText("("+courses.getClassInfo()+")");
+                        taka_txt.setText("Total Price : "+courses.getCourseFee()+" BDT");
+                        usd_txt.setText("("+courses.getUsdeuro()+")");
+
+                        for (int i = 0; i < courses.getInstallments().size(); ++i) {
+
+                            switch (i) {
+                                case 0:
+                                    first_installment_txt.setVisibility(View.VISIBLE);
+                                    first_details_txt.setVisibility(View.VISIBLE);
+                                    first_installment_txt.setText("First Instalment : " + courses.getInstallments().get(0).getBdt()+" BDT");
+                                    break;
+                                case 1:
+                                    second_installment_txt.setVisibility(View.VISIBLE);
+                                    second_details_txt.setVisibility(View.VISIBLE);
+                                    second_installment_txt.setText("Second Instalment : " + courses.getInstallments().get(1).getBdt()+" BDT");
+                                    break;
+                                case 2:
+                                    third_installment_txt.setVisibility(View.VISIBLE);
+                                    third_details_txt.setVisibility(View.VISIBLE);
+                                    third_installment_txt.setText("Third Instalment : " + courses.getInstallments().get(2).getBdt()+" BDT");
+                                    break;
+
+
+                            }
+
+                           // break;
+
+
+                        }
+
+
+                    }
+
+
+                }
+
+
+                //    first_installment_txt.setText(allCourse.get(0).getInstallments().get(0).getBdt());
+
+
+            }
+
+            @Override
+            public void onFailure(Call<AllCourseParent> call, Throwable t) {
+                Log.i("TAG", "onFailure: " + t.getMessage());
             }
         });
 

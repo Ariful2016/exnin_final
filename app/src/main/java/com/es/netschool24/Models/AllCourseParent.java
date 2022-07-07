@@ -16,7 +16,5 @@ public class AllCourseParent {
         return data;
     }
 
-    public void setData(List<AllCourse> data) {
-        this.data = data;
-    }
+
 }

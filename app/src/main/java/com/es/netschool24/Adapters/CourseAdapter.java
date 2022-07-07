@@ -38,7 +38,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CourseViewHolder holder, @SuppressLint("RecyclerView") int position) {
+    public void onBindViewHolder(@NonNull CourseViewHolder holder, @SuppressLint("RecyclerView")  int position) {
         AllCourse allCourse = allCourseList.get(position);
         holder.courseName.setText(allCourse.getName());
         //holder.courseName.setText(allCourse.getInstallments().get(position).getBdt());
@@ -48,17 +48,17 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, CourseDetailsActivity.class);
-                intent.putExtra("img", AppConstants.course_image_path + allCourse.getBannerImage());
-                intent.putExtra("title", allCourse.getName());
+               /* intent.putExtra("img", AppConstants.course_image_path + allCourse.getBannerImage());
+                intent.putExtra("title", allCourse.getName());*/
                 intent.putExtra("id", allCourse.getId().toString());
-                intent.putExtra("overview", allCourse.getOverview());
+  /*              intent.putExtra("overview", allCourse.getOverview());
                 intent.putExtra("slug", allCourse.getSlug());
                 intent.putExtra("duration", allCourse.getDuration());
                 intent.putExtra("totalClass", allCourse.getTotalClass());
                 intent.putExtra("classInfo", allCourse.getClassInfo());
                 intent.putExtra("fee", allCourse.getCourseFee());
                 intent.putExtra("usdeuro", allCourse.getUsdeuro());
-                //intent.putExtra("installment", allCourse.getInstallments().get(position).getBdt());
+                intent.putExtra("installment", allCourse.getInstallments().get(holder.getAdapterPosition()).getBdt());*/
                 context.startActivity(intent);
             }
         });

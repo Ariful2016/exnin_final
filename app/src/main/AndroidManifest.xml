@@ -15,9 +15,16 @@
         android:theme="@style/Theme.NetSchool24"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Activities.TeacherProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.CartCheckoutActivity"
+            android:exported="false"
+            android:parentActivityName=".Activities.CartActivity" />
+        <activity
             android:name=".Activities.PrivacyPolicyActivity"
             android:exported="false"
-            android:parentActivityName=".Activities.DashboardActivity"/>
+            android:parentActivityName=".Activities.DashboardActivity" />
         <activity
             android:name=".Activities.CartActivity"
             android:exported="false"
@@ -33,43 +40,18 @@
         </service>
 
         <activity
-            android:name=".Activities.NotificationDemoActivity"
-            android:exported="true">
-
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
-        </activity>
-        <activity
             android:name=".Activities.JoinFreeLearningActivity"
             android:exported="true"
             android:parentActivityName=".Activities.DashboardActivity" />
         <activity
-            android:name=".Activities.ProfileActivity"
-            android:exported="true" />
-        <activity
             android:name=".Activities.WebViewActivity"
             android:exported="true"
             android:parentActivityName=".Activities.DashboardActivity" />
-        <activity
-            android:name=".Activities.FacebookSignInActivity"
-            android:exported="true" />
-        <activity
-            android:name=".Activities.SignUpActivity"
-            android:exported="true" />
+
         <activity
             android:name=".Activities.SignInActivity"
             android:exported="true" />
-        <activity
-            android:name=".Activities.GoogleSignInActivity"
-            android:exported="true" />
-        <activity
-            android:name=".Activities.Signin_LoginActivity"
-            android:exported="true" />
+
         <activity
             android:name=".Activities.CourseDetailsActivity"
             android:exported="true"
@@ -84,42 +66,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.TeacherLoginActivity"
-            android:exported="true"
-            android:parentActivityName=".Activities.TeacherRegisterActivity" />
-        <activity
             android:name=".Activities.TeacherRegisterActivity"
             android:exported="true"
             android:parentActivityName=".Activities.DashboardActivity" />
-        <activity
-            android:name=".Activities.StudentLoginActivity"
-            android:exported="true"
-            android:parentActivityName=".Activities.StudentRegisterActivity" />
         <activity
             android:name=".Activities.StudentRegisterActivity"
             android:exported="true"
             android:parentActivityName=".Activities.DashboardActivity" />
         <activity
-            android:name=".Activities.StartActivity"
-            android:exported="true" />
-        <activity
             android:name=".Activities.ContactActivity"
-            android:exported="true"
-            android:parentActivityName=".Activities.DashboardActivity" />
-        <activity
-            android:name=".Activities.ComplainActivity"
-            android:exported="true"
-            android:parentActivityName=".Activities.DashboardActivity" />
-        <activity
-            android:name=".Activities.NotificationActivity"
-            android:exported="true"
-            android:parentActivityName=".Activities.DashboardActivity" />
-        <activity
-            android:name=".Activities.PaymentActivity"
-            android:exported="true"
-            android:parentActivityName=".Activities.DashboardActivity" />
-        <activity
-            android:name=".Activities.FeeActivity"
             android:exported="true"
             android:parentActivityName=".Activities.DashboardActivity" />
         <activity

@@ -11,7 +11,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.DatabaseErrorHandler;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -66,7 +68,7 @@ public class DashboardActivity extends AppCompatActivity {
     Toolbar toolbar;
 
     CircleImageView profile_image;
-    ImageView logo;
+    ImageView logo,top_logo;
 
     TextView profileName, profileEmail, aboutUs, yourProfile, course, studentRegistration,teacherRegistration,freeLearning,visitWebsite, payment, notification, complain, contact;
 
@@ -88,7 +90,6 @@ public class DashboardActivity extends AppCompatActivity {
         // find all text view
         profile_image = findViewById(R.id.profile_image);
         profileName = findViewById(R.id.profileName);
-        profileEmail = findViewById(R.id.profileEmail);
         aboutUs = findViewById(R.id.aboutUs);
         yourProfile = findViewById(R.id.yourProfile);
         course = findViewById(R.id.course);
@@ -96,11 +97,9 @@ public class DashboardActivity extends AppCompatActivity {
         teacherRegistration = findViewById(R.id.teacherRegistration);
         freeLearning = findViewById(R.id.freeLearning);
         visitWebsite = findViewById(R.id.visitWebsite);
-        payment = findViewById(R.id.payment);
-        notification = findViewById(R.id.notification);
-        complain = findViewById(R.id.complain);
         contact = findViewById(R.id.contact);
         logo = findViewById(R.id.logo);
+        top_logo = findViewById(R.id.top_logo);
 
         optionsList = new ArrayList<>();
 
@@ -118,8 +117,8 @@ public class DashboardActivity extends AppCompatActivity {
 
                         toolbar.setLogoDescription(AppConstants.logo_image_path+i.getLogo());
 
+                        Glide.with(DashboardActivity.this).load(AppConstants.logo_image_path+i.getLogo()).into(top_logo);
 
-                        //logo.setImageURI(Uri.parse(AppConstants.logo_icon_image_path+i.getLogoIcon()));
                         Glide.with(DashboardActivity.this).load(AppConstants.logo_icon_image_path+i.getLogoIcon()).into(logo);
                     }
                 }
@@ -178,6 +177,12 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
 
+        if (SharedPrefManager.getInstance(DashboardActivity.this).isLoggedIn()){
+            profileName.setText(SignInActivity.userName);
+        }else {
+            profileName.setText("Your Name");
+        }
+
 
 
 
@@ -190,14 +195,9 @@ public class DashboardActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.home:
                         fragmentManager.beginTransaction().replace(R.id.container, new HomeFragment(), null).commit();
-
-                        Toast.makeText(DashboardActivity.this, "home is clicked", Toast.LENGTH_SHORT).show();
                         break;
 
                     case R.id.share:
-                        Toast.makeText(DashboardActivity.this, "share is clicked", Toast.LENGTH_SHORT).show();
-                        // PopupMenu popupMenu = new PopupMenu(DashboardActivity.this,R.id.share);
-
                         ShareCompat.IntentBuilder
                                 .from(DashboardActivity.this)
                                 .setType("text/plain")
@@ -207,18 +207,30 @@ public class DashboardActivity extends AppCompatActivity {
                         break;
 
                     case R.id.whatsapp:
-
                         break;
+
                     case R.id.message:
-
                         fragmentManager.beginTransaction().replace(R.id.container, new MessageFragment(), null).commit();
-
-                        Toast.makeText(DashboardActivity.this, "Message is clicked", Toast.LENGTH_SHORT).show();
-
                         break;
+
                     case R.id.profile:
-                        Intent intent = new Intent(DashboardActivity.this, YourProfileActivity.class);
-                        startActivity(intent);
+
+                        if (SharedPrefManager.getInstance(DashboardActivity.this).isLoggedIn()){
+                                if(SignInActivity.role.equals("student")){
+                                    Intent intent = new Intent(DashboardActivity.this, YourProfileActivity.class);
+                                    startActivity(intent);
+                                }else if(SignInActivity.role.equals("teacher")){
+                                    Intent intent = new Intent(DashboardActivity.this, TeacherProfileActivity.class);
+                                    startActivity(intent);
+                                }
+                        }else {
+                            Intent intent = new Intent(DashboardActivity.this, SignInActivity.class);
+                            startActivity(intent);
+                        }
+
+                        Log.i("onN", "student: "+SignInActivity.role.equals("student"));
+                        Log.i("onN", "teacher: "+SignInActivity.role.equals("teacher"));
+
                         break;
 
                 }
@@ -241,7 +253,7 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(DashboardActivity.this, YourProfileActivity.class);
+                Intent intent = new Intent(DashboardActivity.this, SignInActivity.class);
                 startActivity(intent);
             }
         });
@@ -282,32 +294,10 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
 
-        payment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                Intent intent = new Intent(DashboardActivity.this, PaymentActivity.class);
-                startActivity(intent);
-            }
-        });
 
-        notification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                Intent intent = new Intent(DashboardActivity.this, NotificationActivity.class);
-                startActivity(intent);
-            }
-        });
 
-        complain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(DashboardActivity.this, ComplainActivity.class);
-                startActivity(intent);
-            }
-        });
 
         visitWebsite.setOnClickListener(new View.OnClickListener() {
             @Override

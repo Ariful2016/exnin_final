@@ -6,9 +6,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.es.netschool24.Adapters.CartAdapter;
@@ -18,31 +21,38 @@ import com.es.netschool24.Models.CartCourseMain;
 import com.es.netschool24.MyApi;
 import com.es.netschool24.MyRetrofit;
 import com.es.netschool24.R;
+import com.es.netschool24.interfaces.CartDeleteListener;
+import com.es.netschool24.storage.SharedPrefManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CartActivity extends AppCompatActivity {
+public class CartActivity extends AppCompatActivity implements CartDeleteListener {
 
     Toolbar toolbar;
-    //TextView day, time, course_title_txt, fee_taka_txt, first_pay,second_pay, third_pay,total_taka_txt, total_taka;
+
     AppCompatButton check_btn;
-    Intent intent;
-    String d,t, img, title, fee;
+
+    String d, t, img, title, fee;
     CircleImageView kids_img;
 
     List<Cart> cartList;
     RecyclerView cart_recycler;
     List<CartCourse> cartCourseList;
+    List<CartCourseMain> cartCourseMainList;
 
     CartAdapter cartAdapter;
 
     TextView total_taka;
+    MyApi myApi;
+    String token;
+
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -51,6 +61,7 @@ public class CartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cart);
 
         toolbar = findViewById(R.id.enroll_toolbar);
+        check_btn = findViewById(R.id.check_btn);
 
 
         setSupportActionBar(toolbar);
@@ -59,58 +70,87 @@ public class CartActivity extends AppCompatActivity {
 
         cartList = new ArrayList<>();
         cartCourseList = new ArrayList<>();
+        cartCourseMainList = new ArrayList<>();
 
         cart_recycler = findViewById(R.id.cart_recycler);
         total_taka = findViewById(R.id.total_taka);
 
-       // intent = getIntent();
 
-        /*if (intent.hasExtra("day")){
-           d =  intent.getStringExtra("day");
-           t = intent.getStringExtra("time");
-           //img = intent.getStringExtra("img");
-           //title = intent.getStringExtra("title");
-           //fee = intent.getStringExtra("fee");
-        }
-*/
+        SharedPreferences sharedPreferences = getSharedPreferences(SharedPrefManager.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        token = sharedPreferences.getString("token", "");
+
+        myApi = MyRetrofit.getRetrofit().create(MyApi.class);
 
 
+        getAllCart();
 
-        //Picasso.get().load(img).placeholder(R.drawable.kidlearning).into(kids_img);
-        //course_title_txt.setText(title);
-        //fee_taka_txt.setText(fee+" BDT");
+        check_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(CartActivity.this,CartCheckoutActivity.class ));
+            }
+        });
 
-       // day.setText(d);
-       // time.setText(t);
+    }
+
+    private void getAllCart() {
+        Call<CartCourseMain> callCart = myApi.getCart("Bearer " + token);
+        callCart.enqueue(new Callback<CartCourseMain>() {
+            @Override
+            public void onResponse(Call<CartCourseMain> call, Response<CartCourseMain> response) {
+                if (response.isSuccessful()) {
+                    assert response.body() != null;
+
+                    cartList = response.body().getCarts();
+                    Log.i("cartId", "success " + response.body().getCarts().size());
+
+                    cartAdapter = new CartAdapter(CartActivity.this, cartList, CartActivity.this);
+                    // cartAdapter.notifyDataSetChanged();
+                    cart_recycler.setAdapter(cartAdapter);
+
+                    String total_price = response.body().getPayTotal().toString();
+
+                    Log.i("cartId", "success " + total_price + " tk");
+                    total_taka.setText(total_price + ".00 BDT");
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CartCourseMain> call, Throwable t) {
+                Log.i("cartId", "fail " + t.getLocalizedMessage().toString());
+
+            }
+        });
+
+
+    }
+
+    @Override
+    public void deleteCart(Cart cart) {
+        SharedPreferences sharedPreferences = getSharedPreferences(SharedPrefManager.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
 
         MyApi myApi = MyRetrofit.getRetrofit().create(MyApi.class);
-        Call<CartCourseMain> callCart = myApi.getCart();
+        Call<ResponseBody> removeCart = myApi.removeCart("Bearer " + token, cart.getId().toString());
+        removeCart.enqueue(new Callback<ResponseBody>() {
 
-       callCart.enqueue(new Callback<CartCourseMain>() {
-           @Override
-           public void onResponse(Call<CartCourseMain> call, Response<CartCourseMain> response) {
-               if (response.isSuccessful()){
-                   assert response.body() != null;
-                   //cartCourseList = response.body();
-                   Log.i("cartId","success ") ;
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
-                   cartAdapter = new CartAdapter(CartActivity.this, cartCourseList);
-                   cart_recycler.setAdapter(cartAdapter);
+                if (response.isSuccessful()) {
+                    getAllCart();
 
+                }
 
-                   int total_price = response.body().getPayTotal();
-                   Log.i("cartId","success "+ total_price) ;
-                   total_taka.setText(total_price);
-               }
-           }
+            }
 
-           @Override
-           public void onFailure(Call<CartCourseMain> call, Throwable t) {
-               Log.i("cartId","fail "+ t.getLocalizedMessage().toString()) ;
-
-           }
-       });
-
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.i("remove", "not_remove: " + t.getLocalizedMessage().toString());
+            }
+        });
 
 
     }

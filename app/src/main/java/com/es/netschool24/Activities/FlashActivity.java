@@ -17,11 +17,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class FlashActivity extends AppCompatActivity {
 
     ImageView flash_img;
-    TextView flash_txt;
     CountDownTimer countDownTimer;
 
-    //FirebaseAuth firebaseAuth;
-    //FirebaseUser firebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +26,6 @@ public class FlashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_flash);
 
         flash_img = findViewById(R.id.flash_img);
-
-
-        //firebaseAuth = FirebaseAuth.getInstance();
-        //firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         countDownTimer = new CountDownTimer(300,200) {
             @Override
@@ -42,14 +35,6 @@ public class FlashActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-/*
-                if(firebaseUser!= null){
-                    startActivity(new Intent(FlashActivity.this, DashboardActivity.class));
-                    finish();
-                }else {
-                    startActivity(new Intent(FlashActivity.this, StartActivity.class));
-                    finish();
-                }*/
 
                 startActivity(new Intent(FlashActivity.this, DashboardActivity.class));
                 finish();
