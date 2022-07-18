@@ -14,7 +14,7 @@
             android:textSize="20sp"
             android:textColor="@color/white"
             android:textStyle="bold"
-            android:text="Online Payment"
+            android:text="Payment"
             app:layout_constraintHorizontal_bias=".3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

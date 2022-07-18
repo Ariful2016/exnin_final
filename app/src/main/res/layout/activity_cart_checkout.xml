@@ -144,7 +144,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cart_txt"
             android:background="@drawable/btn_back"
-            android:text="Continue to Checkout"
+            android:text="Continue to Payment"
             android:layout_marginTop="20dp"
             android:textAllCaps="false"
             android:textColor="@color/white"

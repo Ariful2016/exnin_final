@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.es.netschool24">
+    package="com.exnin.onlinelearning">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -15,49 +15,44 @@
         android:theme="@style/Theme.NetSchool24"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".Activities.TeacherProfileActivity"
+            android:name="com.exnin.onlinelearning.Activities.PaymentActivity"
             android:exported="false" />
         <activity
-            android:name=".Activities.CartCheckoutActivity"
+            android:name="com.exnin.onlinelearning.Activities.TeacherProfileActivity"
             android:exported="false"
-            android:parentActivityName=".Activities.CartActivity" />
+            android:parentActivityName="com.exnin.onlinelearning.Activities.CartCheckoutActivity"/>
         <activity
-            android:name=".Activities.PrivacyPolicyActivity"
+            android:name="com.exnin.onlinelearning.Activities.CartCheckoutActivity"
             android:exported="false"
-            android:parentActivityName=".Activities.DashboardActivity" />
+            android:parentActivityName="com.exnin.onlinelearning.Activities.CartActivity" />
         <activity
-            android:name=".Activities.CartActivity"
+            android:name="com.exnin.onlinelearning.Activities.PrivacyPolicyActivity"
             android:exported="false"
-            android:parentActivityName=".Activities.CourseDetailsActivity" />
+            android:parentActivityName="com.exnin.onlinelearning.Activities.DashboardActivity" />
+        <activity
+            android:name="com.exnin.onlinelearning.Activities.CartActivity"
+            android:exported="false"
+            android:parentActivityName="com.exnin.onlinelearning.Activities.CourseDetailsActivity" />
 
-        <service
-            android:name=".Services.MyService"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
+
 
         <activity
-            android:name=".Activities.JoinFreeLearningActivity"
+            android:name="com.exnin.onlinelearning.Activities.JoinFreeLearningActivity"
             android:exported="true"
-            android:parentActivityName=".Activities.DashboardActivity" />
+            android:parentActivityName="com.exnin.onlinelearning.Activities.DashboardActivity" />
         <activity
-            android:name=".Activities.WebViewActivity"
+            android:name="com.exnin.onlinelearning.Activities.WebViewActivity"
             android:exported="true"
-            android:parentActivityName=".Activities.DashboardActivity" />
-
+            android:parentActivityName="com.exnin.onlinelearning.Activities.DashboardActivity" />
         <activity
-            android:name=".Activities.SignInActivity"
+            android:name="com.exnin.onlinelearning.Activities.SignInActivity"
             android:exported="true" />
-
         <activity
-            android:name=".Activities.CourseDetailsActivity"
+            android:name="com.exnin.onlinelearning.Activities.CourseDetailsActivity"
             android:exported="true"
-            android:parentActivityName=".Activities.OurCourseActivity" />
+            android:parentActivityName="com.exnin.onlinelearning.Activities.OurCourseActivity" />
         <activity
-            android:name=".Activities.FlashActivity"
+            android:name="com.exnin.onlinelearning.Activities.FlashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -66,29 +61,29 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.TeacherRegisterActivity"
+            android:name="com.exnin.onlinelearning.Activities.TeacherRegisterActivity"
             android:exported="true"
-            android:parentActivityName=".Activities.DashboardActivity" />
+            android:parentActivityName="com.exnin.onlinelearning.Activities.DashboardActivity" />
         <activity
-            android:name=".Activities.StudentRegisterActivity"
+            android:name="com.exnin.onlinelearning.Activities.StudentRegisterActivity"
             android:exported="true"
-            android:parentActivityName=".Activities.DashboardActivity" />
+            android:parentActivityName="com.exnin.onlinelearning.Activities.DashboardActivity" />
         <activity
-            android:name=".Activities.ContactActivity"
+            android:name="com.exnin.onlinelearning.Activities.ContactActivity"
             android:exported="true"
-            android:parentActivityName=".Activities.DashboardActivity" />
+            android:parentActivityName="com.exnin.onlinelearning.Activities.DashboardActivity" />
         <activity
-            android:name=".Activities.OurCourseActivity"
+            android:name="com.exnin.onlinelearning.Activities.OurCourseActivity"
             android:exported="true"
-            android:parentActivityName=".Activities.DashboardActivity" />
+            android:parentActivityName="com.exnin.onlinelearning.Activities.DashboardActivity" />
         <activity
-            android:name=".Activities.YourProfileActivity"
+            android:name="com.exnin.onlinelearning.Activities.YourProfileActivity"
             android:exported="true" />
         <activity
-            android:name=".Activities.AboutUsActivity"
+            android:name="com.exnin.onlinelearning.Activities.AboutUsActivity"
             android:exported="true"
-            android:parentActivityName=".Activities.DashboardActivity" />
-        <activity android:name=".Activities.DashboardActivity" />
+            android:parentActivityName="com.exnin.onlinelearning.Activities.DashboardActivity" />
+        <activity android:name="com.exnin.onlinelearning.Activities.DashboardActivity" />
 
         <meta-data
             android:name="preloaded_fonts"
